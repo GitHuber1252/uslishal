@@ -15,31 +15,28 @@ from telegram.ext import (
     filters,
 )
 
-# ====== НАСТРОЙКИ ======
-TELEGRAM_TOKEN = "8281874855:AAFs89dZ5pJ-hvrJLG_vZMfuXWT91i5t1dE"   # вставь свой токен
+TELEGRAM_TOKEN = "8281874855:AAHWGkcFPVv4AwvpmirBUP1qbXCHJVRac0Q"  
 AUDIO_DIR = "audio"
 TEMPLATE_PATH = "templates/template.docx"
 DATA_FILE = "data.json"
 
-# Создаём папки
+
 os.makedirs(AUDIO_DIR, exist_ok=True)
 os.makedirs("templates", exist_ok=True)
 
-# ====== ЛОГИ ======
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
-# ====== СОСТОЯНИЯ ======
 SELECTING_RECORD, EDITING_SUMMARY = range(2)
 
-# ====== ИНИЦИАЛИЗАЦИЯ ======
+
 whisper_model = None
 summarizer_pipeline = None
 
-# Создаем шаблон, если его нет
 if not os.path.exists(TEMPLATE_PATH):
     from docx import Document
     doc = Document()
@@ -49,7 +46,7 @@ if not os.path.exists(TEMPLATE_PATH):
     doc.add_paragraph('[SUMMARY_TEXT]')
     doc.save(TEMPLATE_PATH)
 
-# ====== JSON ХРАНИЛКА ======
+
 def load_data() -> Dict:
     if not os.path.exists(DATA_FILE):
         return {"users": {}}
@@ -105,7 +102,7 @@ def update_summary_text(user_id: int, record_id: int, new_summary: str):
             break
     save_data(data)
 
-# ====== МОДЕЛИ ======
+
 def load_models():
     global whisper_model, summarizer_pipeline
     try:
@@ -154,7 +151,6 @@ def summarize_text(text: str) -> str:
         logger.error(f"Ошибка суммаризации: {e}")
         return text[:100] + "..." if len(text) > 100 else text
 
-# ====== DOCX ======
 from docx import Document
 
 def generate_docx(summary_text: str, output_path: str):
@@ -175,7 +171,7 @@ def generate_docx(summary_text: str, output_path: str):
         doc.add_paragraph(summary_text)
         doc.save(output_path)
 
-# ====== КОМАНДЫ ======
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     get_or_create_user(user.id, user.username)
@@ -323,9 +319,8 @@ async def back_to_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     await start(update, context)
 
-# ====== MAIN ======
+
 def main():
-    # Новый способ для версии 20.x
     application = Application.builder().token(TELEGRAM_TOKEN).build()
 
     conv_handler = ConversationHandler(
@@ -344,8 +339,7 @@ def main():
     application.add_handler(conv_handler)
 
     logger.info("🚀 Бот запущен...")
-    
-    # Запуск бота
+
     application.run_polling()
 
 if __name__ == "__main__":
