@@ -15,7 +15,7 @@ from telegram.ext import (
     filters,
 )
 
-TELEGRAM_TOKEN = "8281874855:AAHXSlURQ7q0I8Y-sBOLwly6sWvAL65lkJY"  
+TELEGRAM_TOKEN = ""  
 AUDIO_DIR = "audio"
 TEMPLATE_PATH = "templates/template.docx"
 DATA_FILE = "data.json"
