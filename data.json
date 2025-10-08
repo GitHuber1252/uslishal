@@ -2,11 +2,47 @@
   "users": {
     "1802174155": {
       "username": "GrishaLV",
-      "records": []
+      "records": [
+        {
+          "id": 1759908044,
+          "audio_path": "audio\\AwACAgIAAxkBAAM0aOYQy_UDnoXIBZAruXKk6eVYEQ0AAiiGAALpKjBLffkrnE9ApWA2BA.ogg",
+          "raw_text": "Не удалось распознать аудио",
+          "summary_text": "Не удалось распознать аудио",
+          "created_at": "2025-10-08T10:20:44.305711"
+        }
+      ]
     },
     "6569029988": {
       "username": "ivanneutratov",
       "records": []
+    },
+    "1812963300": {
+      "username": "mrwelm",
+      "records": [
+        {
+          "id": 1759907845,
+          "audio_path": "audio\\AwACAgIAAxkBAAMvaOYPvQgEB2LaHH0NwF6cOnTCgCoAAo2DAAITDTFLe9qqYTkfy8E2BA.ogg",
+          "raw_text": "Не удалось распознать аудио",
+          "summary_text": "Не удалось распознать аудио",
+          "created_at": "2025-10-08T10:17:25.681138"
+        }
+      ]
+    },
+    "1115029572": {
+      "username": "L1min23",
+      "records": []
+    },
+    "5619577383": {
+      "username": "Ganymede01",
+      "records": [
+        {
+          "id": 1759908209,
+          "audio_path": "audio\\AwACAgIAAxkBAAM5aOYRcOkewo6aBV6Lgz6_Pc2-IoUAAsOaAAJ8_jBLWIVDo2VSRew2BA.ogg",
+          "raw_text": "Не удалось распознать аудио",
+          "summary_text": "Не удалось распознать аудио",
+          "created_at": "2025-10-08T10:23:29.476229"
+        }
+      ]
     }
   }
 }

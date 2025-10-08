@@ -15,7 +15,7 @@ from telegram.ext import (
     filters,
 )
 
-TELEGRAM_TOKEN = "8281874855:AAHWGkcFPVv4AwvpmirBUP1qbXCHJVRac0Q"  
+TELEGRAM_TOKEN = "8281874855:AAHXSlURQ7q0I8Y-sBOLwly6sWvAL65lkJY"  
 AUDIO_DIR = "audio"
 TEMPLATE_PATH = "templates/template.docx"
 DATA_FILE = "data.json"
@@ -131,7 +131,7 @@ def transcribe_audio(audio_path: str) -> str:
         return result["text"]
     except Exception as e:
         logger.error(f"Ошибка распознавания: {e}")
-        return "Не удалось распознать аудио"
+        return "Не удалось понять тебя, родной"
 
 def summarize_text(text: str) -> str:
     try:
@@ -177,21 +177,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     get_or_create_user(user.id, user.username)
     
     keyboard = [
-        [InlineKeyboardButton("📝 Записать голос", callback_data="record_voice")],
-        [InlineKeyboardButton("📄 Создать документ", callback_data="create_document")]
+        [InlineKeyboardButton(" Записать голос", callback_data="record_voice")],
+        [InlineKeyboardButton(" Создать документ", callback_data="create_document")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     if update.message:
         await update.message.reply_text(
-            f"Привет, {user.first_name}! 👋\n\n"
+            f"Привет, {user.first_name}! \n\n"
             "Я бот для записи голоса, распознавания и создания отчётов.\n\n"
             "Выбери действие:",
             reply_markup=reply_markup
         )
     else:
         await update.callback_query.edit_message_text(
-            f"Привет, {user.first_name}! 👋\n\n"
+            f"Привет, {user.first_name}! \n\n"
             "Я бот для записи голоса, распознавания и создания отчётов.\n\n"
             "Выбери действие:",
             reply_markup=reply_markup
@@ -200,7 +200,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def record_voice_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text("🔊 Отправьте аудиосообщение — я его распознаю и сожму.")
+    await query.edit_message_text(" Отправьте аудиосообщение — я его услышу.")
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
@@ -216,7 +216,7 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await file.download_to_drive(audio_path)
         logger.info(f"Аудио сохранено: {audio_path}")
 
-        await update.message.reply_text("🔄 Обрабатываю аудио...")
+        await update.message.reply_text("Слушаю аудио...")
 
         raw_text = transcribe_audio(audio_path)
         summary_text = summarize_text(raw_text)
@@ -224,13 +224,13 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         save_voice_record(user.id, audio_path, raw_text, summary_text)
 
         await update.message.reply_text(
-            f"✅ Голос записан!\n\n"
-            f"📌 **Содержание:**\n{summary_text}\n\n"
+            f"Услышал тебя, родной!\n\n"
+            f" **Содержание:**\n{summary_text}\n\n"
             f"Теперь ты можешь создать документ — нажми «Создать документ»."
         )
     except Exception as e:
         logger.error(f"Ошибка обработки голоса: {e}")
-        await update.message.reply_text("❌ Произошла ошибка при обработке аудио.")
+        await update.message.reply_text(" Произошла ошибка при обработке аудио.")
 
 async def create_document_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -272,9 +272,9 @@ async def select_record(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.edit_message_text(
         f"Вы выбрали запись:\n\n"
-        f"📝 Исходный текст:\n{record['raw_text'][:100]}...\n\n"
-        f"💡 Сжатый текст (редактируемый):\n{record['summary_text']}\n\n"
-        f"✏️ Теперь отправьте мне **новый текст**, который нужно вставить в документ.\n"
+        f" Исходный текст:\n{record['raw_text'][:100]}...\n\n"
+        f" Сжатый текст (редактируемый):\n{record['summary_text']}\n\n"
+        f" Теперь отправьте мне **новый текст**, который нужно вставить в документ.\n"
         f"(или отправьте /cancel, чтобы отменить)"
     )
     return EDITING_SUMMARY
@@ -295,7 +295,7 @@ async def edit_summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
     generate_docx(new_summary, output_path)
 
     with open(output_path, "rb") as doc:
-        await update.message.reply_document(doc, caption="📄 Ваш готовый документ!")
+        await update.message.reply_document(doc, caption=" Ваш готовый документ!")
 
     context.user_data.clear()
     
@@ -303,7 +303,7 @@ async def edit_summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("🏠 Главное меню", callback_data="start")]
     ])
     await update.message.reply_text(
-        "✅ Документ создан и отправлен!\n\n"
+        " Документ создан и отправлен!\n\n"
         "Чтобы сделать ещё один — нажмите «Создать документ».",
         reply_markup=keyboard
     )
